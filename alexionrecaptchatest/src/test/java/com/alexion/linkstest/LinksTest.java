@@ -108,11 +108,6 @@ public class LinksTest {
 
 	}
 
-	@AfterMethod
-	public void tearDown() {
-		driver.close();
-	}
-
 	private String getCaptchaSolution(String siteKey, String url) {
 		try {
 			// TODO 2) captcha solver server address. You can use your local IP address
