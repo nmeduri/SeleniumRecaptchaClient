@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Captcha Solver Page</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script>
+            function startTimer() {
+                try {
+                    var captchaResponseElement = document.getElementById("g-recaptcha-response");
+                    if(captchaResponseElement) {
+                        //captchaResponseElement.style.display='block';
+                        var captchaResponse = captchaResponseElement.value;
+                        if(captchaResponse) {
+                            var a = document.createElement('a');
+                            a.href = '/solved';
+                            var hostname = a.hostname;
+                            $.ajax({
+                              method: "POST",
+                              url: "/solved",
+                              data: {"solution":captchaResponse, "host": hostname, "id": %ID%},
+                              success: function(response) {
+                                if(response === "success") {
+                                    window.close();
+                                }
+                              }
+                            });
+                        } else {
+                            setTimeout(startTimer, 5000);
+                        }
+                    }
+                } catch (ex) {
+                    console.error(ex);
+                    alert(JSON.stringify(ex));
+                }
+            }
+        </script>
+</head>
+<body onload="startTimer()">
+<form action="#" method="POST">
+    <div class="g-recaptcha" data-sitekey="%KEY%"></div>
+</form>
+</body>
+</html>
