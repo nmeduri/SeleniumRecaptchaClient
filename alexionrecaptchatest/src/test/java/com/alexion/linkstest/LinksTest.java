@@ -13,48 +13,59 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-import org.testng.annotations.AfterTest;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 public class LinksTest {
 	WebDriver driver;
 	String url = "https://alexion.com/";
-	
-	@Test(priority=1)
+
+	@Test(priority = 1)
 	public void medicalInformation() throws InterruptedException {
 		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/drivers/chromedriver.exe");
+
 		ChromeDriver driver = new ChromeDriver();
+
 		// TODO this is used to change the location of chrome browser opened by selenium
 		driver.manage().window().setPosition(new Point(900, 20));
-		driver.manage().window().maximize();
 		driver.get(url);
+		driver.manage().window().maximize();
+
 		driver.findElement(By.linkText("Contact Us")).click();
+
 		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+
 		driver.findElement(By.linkText("Medical Information")).click();
-		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
 		driver.findElement(By.xpath("//*[@id=\"wffm77b644cfd63c4ae28f2cdb6a41c929cd_Sections_0__Fields_1__Value\"]"))
 				.sendKeys("Naveen");
+
 		driver.findElement(By.xpath("//*[@id=\"wffm77b644cfd63c4ae28f2cdb6a41c929cd_Sections_0__Fields_2__Value\"]"))
 				.sendKeys("Kumar");
+
 		driver.findElement(By.xpath("//*[@id=\"wffm77b644cfd63c4ae28f2cdb6a41c929cd_Sections_0__Fields_3__Value\"]"))
 				.sendKeys("naveen.meduri@gmail.com");
+
 		Select sel = new Select(driver.findElement(
 				By.xpath("//*[@id=\"wffm77b644cfd63c4ae28f2cdb6a41c929cd_Sections_0__Fields_11__Value\"]")));
 		sel.selectByVisibleText("India");
+
 		driver.findElement(By.xpath("//*[@id=\"wffm77b644cfd63c4ae28f2cdb6a41c929cd_Sections_0__Fields_14__Value\"]"))
 				.sendKeys("Testing");
+
 		driver.findElement(By.xpath("//*[@id=\"wffm77b644cfd63c4ae28f2cdb6a41c929cd_Sections_0__Fields_15__Value\"]"))
 				.sendKeys("ABCD");
+
 		driver.findElement(By.xpath("//*[@id=\"wffm77b644cfd63c4ae28f2cdb6a41c929cd_Sections_0__Fields_16__Value\"]"))
 				.sendKeys("XYZ");
-
+		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
 		WebElement captchaKeyDivElement = driver.findElement(By.className("g-recaptcha"));
 		// TODO 3) get site key from source code of target website
 		String siteKey = captchaKeyDivElement.getAttribute("data-sitekey");
 		System.out.println("Site Key : " + siteKey);
 		String captchaSolution = getCaptchaSolution(siteKey, url);
 		// fill that response in text area
-		//WebElement textArea = driver.findElementByCssSelector("#g-recaptcha-response");
+		// WebElement textArea =
+		// driver.findElementByCssSelector("#g-recaptcha-response");
 		WebElement textArea = driver.findElement(By.cssSelector("#g-recaptcha-response"));
 		String js = "arguments[0].style.height='auto'; arguments[0].style.display='block';";
 		((JavascriptExecutor) driver).executeScript(js, textArea);
@@ -62,14 +73,14 @@ public class LinksTest {
 		textArea.sendKeys(captchaSolution);
 		// submit the page
 		captchaKeyDivElement.submit();
-        Thread.sleep(2000);
+		Thread.sleep(2000);
 	}
 
-	@Test(priority=2)
+	@Test(priority = 2)
 	public void careerInquiries() {
 		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/drivers/chromedriver.exe");
 		ChromeDriver driver = new ChromeDriver();
-		// TODO this is used to change the location of chrome browser opened by selenium
+        // TODO this is used to change the location of chrome browser opened by selenium
 		driver.manage().window().setPosition(new Point(900, 20));
 		driver.manage().window().maximize();
 		driver.get(url);
@@ -82,22 +93,22 @@ public class LinksTest {
 				.sendKeys("Fleming");
 		driver.findElement(By.xpath("//*[@id=\"wffm77b644cfd63c4ae28f2cdb6a41c929cd_Sections_0__Fields_2__Value\"]"))
 				.sendKeys("abc@bcd.com");
-		WebElement captchaKeyDivElement = driver.findElement(By.className("g-recaptcha"));
-		// TODO 3) get site key from source code of target website
-		String siteKey = captchaKeyDivElement.getAttribute("data-sitekey");
+		WebElement captchaKeyDivElement = driver.findElement(By.className("g-recaptcha")); 
+		// TODO 3) get site key from
+		// source code of target website 
+		String siteKey =captchaKeyDivElement.getAttribute("data-sitekey");
 		System.out.println("Site Key : " + siteKey);
-		String captchaSolution = getCaptchaSolution(siteKey, url);
-		// fill that response in text area
+		String captchaSolution = getCaptchaSolution(siteKey, url); // fill that response in text area
 		WebElement textArea1 = driver.findElement(By.cssSelector("#g-recaptcha-response"));
 		String js = "arguments[0].style.height='auto'; arguments[0].style.display='block';";
 		((JavascriptExecutor) driver).executeScript(js, textArea1);
 		textArea1.clear();
-		textArea1.sendKeys(captchaSolution);
-		// submit the page
+		textArea1.sendKeys(captchaSolution); // submit the page
 		captchaKeyDivElement.submit();
 
 	}
-	@AfterTest
+
+	@AfterMethod
 	public void tearDown() {
 		driver.close();
 	}
